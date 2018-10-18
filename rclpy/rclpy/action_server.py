@@ -82,7 +82,7 @@ class ActionServer(Node):
     def get_result(self, request, response):
         action_id = request.action_id
         if action_id in self.actions and self.actions[action_id].state is 'Succeeded':
-            response.result = self.actions[action_id].result
+            response.sequence = self.actions[action_id].result_array
         return response
 
     def feedback(self):
@@ -93,17 +93,16 @@ class ActionServer(Node):
         if action.state is 'Accepted':
             action.execute()
 
-            #TODO: improve error handling
-            number = self.fibonacci_sequence(order)
-            action.result = number
+            action.result_array = [1, 1]
+            n = len(action.result_array)
+            while(n < order):
+                # Break if canceled
+                if action.state is not 'Executing':
+                    break
+                next = action.result_array[n - 1] + action.result_array[n - 2]
+                action.result_array.append(next)
+                n = n + 1
             
-            action.set_succeeded()
-
-    def fibonacci_sequence(self, order):
-        n = 1
-        n_1 = 1
-        for i in range(1, order - 1):
-            next = n + n_1
-            n = n_1
-            n_1 = next
-        return n_1
+            # If state is not in 'cancelling', set it as succeeded
+            if action.state is 'Executing':
+                action.set_succeeded()

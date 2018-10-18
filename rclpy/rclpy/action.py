@@ -22,6 +22,7 @@ class Action:
     def __init__(self, id):
         self.id = id
         self.result = None
+        self.result_array = []
 
         # Flag to differentiate canceling from aborting
         self.aborted = None

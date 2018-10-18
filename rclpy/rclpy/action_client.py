@@ -109,6 +109,6 @@ class ActionClient(Node):
 
         if self.result_future.result() is not None:
             response = self.result_future.result()
-            self.get_logger().info('Fibonacci sequence last number: %d' % response.result)
+            self.get_logger().info('Fibonacci sequence: ' + ' '.join(map(str, response.sequence)))
         else:
             self.get_logger().info('Service call failed %r.' % (self.result_future.exception(),))
