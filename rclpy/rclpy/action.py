@@ -23,6 +23,9 @@ class Action:
         self.id = id
         self.result = None
 
+        # Flag to differentiate canceling from aborting
+        self.aborted = None
+
         # Initialize the state machine
         self.machine = Machine(model=self, states=Action.states, initial='Accepted')
 

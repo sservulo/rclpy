@@ -102,7 +102,7 @@ class ActionServer(Node):
     def fibonacci_sequence(self, order):
         n = 1
         n_1 = 1
-        for i in range(1, order):
+        for i in range(1, order - 1):
             next = n + n_1
             n = n_1
             n_1 = next
