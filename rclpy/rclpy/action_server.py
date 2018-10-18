@@ -49,13 +49,19 @@ class ActionServer(Node):
         self.get_logger().info("Fibonacci action server initialized.")
 
     def accept_action(self, request, response):
+        # Check if action_id already exists in ActionServer
+        if request.action_id in self.actions:
+            response.accepted = False
+            return response
+
+        # To avoid uuid hash collisions
         with self.lock:
             action = Action(request.action_id)
             self.actions[request.action_id] = action
-            
+
             thread = threading.Thread(target = self.execute, args = (action, request.order,))
             self.threads[request.action_id] = thread
-            
+
             self.get_logger().info("Received action with id %s." % request.action_id)
             thread.start()
 

@@ -39,12 +39,12 @@ class ActionClient(Node):
 
         self.get_logger().info("Fibonacci action client initialized.")
 
-    def send_action(self):
+    def send_action(self, action_id):
         while not self.send.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
 
         req = SendFibonacci.Request()
-        req.action_id = 'test' #TODO: use str(uuid.uuid4())
+        req.action_id = action_id #note: uuid as string
         req.order = 10
 
         self.action_id = req.action_id
